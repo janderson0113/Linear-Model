@@ -1,0 +1,106 @@
+---
+title: "Untitled"
+author: "Jaynell Anderson"
+date: "20 November 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+sim = read.csv('Simdata.csv', header=TRUE)
+attach(sim)
+```
+
+# Introduction
+This data was taken from .. The data set contains observation from job applicants on their sim score are strength, grip and rating.
+
+We write three models :
+1. sims = f(arms)
+2. sims = f(grip)
+3. sims = f(arm,grip)
+
+## first model
+
+```{r}
+model1 = lm(SIMS~ARM)
+# scatterplot
+plot(ARM, SIMS)
+abline(model1)
+```
+
+
+This scatterplot shows that the SIMS = -4.09 + 0.5 * ARM. This equation is a straight line through the points on the scatterplot.
+
+```{r}
+# numeric summary
+summary.lm(model1)
+```
+The numeric summary states the SIMS equation and shows that if and when put on a scatterplot it creates a straight line through the points on the plot.
+
+
+
+
+The prediction interval from model1 when arm=94, grip=88 is : 
+```{r}
+newdata = data.frame(ARM=94, GRIP=88)
+predict(model1, newdata, interval= 'prediction')
+```
+
+the predicted values is the first value (fit) and the next two values are the lower and upper prediction values.
+
+## second model
+
+```{r}
+model2 = lm(SIMS~GRIP)
+# scatterplot
+plot(GRIP, SIMS)
+abline(model2)
+```
+
+
+This scatterplot shows that the SIMS = -4.81 + 0.045*GRIP.The scatterplot shows that there's a positive relationship. As the grip gets higher the sims gets higher.
+
+```{r}
+# numeric summary
+summary.lm(model2)
+```
+The numeric summary states the SIMS equation and shows that if and when put on a scatterplot it shows as grip goes higher so does sims.
+
+
+
+
+The prediction interval from model1 when arm=94, grip=88 is : 
+```{r}
+newdata = data.frame(ARM=94, GRIP=88)
+predict(model2, newdata, interval= 'prediction')
+```
+
+the predicted values is the first value (fit) and the next two values are the lower and upper prediction values.
+
+## third model
+
+```{r}
+model3 = lm(SIMS~ARM+GRIP)
+model3
+```
+
+
+Model3 shows that SIMS = -5.43 + 0.037*ARM + 0.024*GRIP
+
+```{r}
+# numeric summary
+summary.lm(model3)
+```
+
+The prediction interval from model3 when arm=94, grip=88 is : 
+```{r}
+newdata = data.frame(ARM=94, GRIP=88)
+predict(model3, newdata, interval= 'prediction')
+```
+
+the predicted values is the first value (fit) and the next two values are the lower and upper prediction values.
+
+```{r}
+anova(model1,model3)
+```
+This chart compares both model 1 and 3. The null hypothesis has no difference. The alternative hypothesis is that one model is better that the other. The P-Value is 4.994e-06 < 0.05. which means we reject the null hypothesis.Model 3 is the better model because its RSS is smaller.
